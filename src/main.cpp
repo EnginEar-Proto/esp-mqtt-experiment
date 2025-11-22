@@ -1,18 +1,10 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include "MQTT_Cyan.h"
-
-const char *project_ssid = "Telekom-phLSrW";
-const char *passwd = "xhd145f1auj";
+#include "Secrets.h"
 
 void connect_to_wifi(const char *ssid, const char *password);
 
-const esp_mqtt_client_config_t mqtt_config = {
-        .host="49.13.17.225",
-        .port=1883,
-        .username="enginear",
-        .password="RAM4Protogen"
-    };
 
 MQTTCyan *client1 = new MQTTCyan(mqtt_config);
 const char *dummy_msg =  "Hi from silly esp32 :3";
