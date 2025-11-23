@@ -5,6 +5,7 @@
 
 void connect_to_wifi(const char *ssid, const char *password);
 
+#define INPUT_PIN 4
 
 MQTTCyan *client1 = new MQTTCyan(mqtt_config);
 const char *dummy_msg =  "Hi from silly esp32 :3";
@@ -15,12 +16,12 @@ void setup() {
 
     connect_to_wifi(project_ssid, passwd);
 
-    //Setting up pin D4 for sensing
-    pinMode(4, OUTPUT);
+    //Setting up input pin for sensing
+    pinMode(INPUT_PIN, INPUT);
 }
 
 void loop() {
-    if(digitalRead(4) == HIGH){
+    if(digitalRead(INPUT_PIN) == HIGH){
         client1->publish("esp32/topic", dummy_msg, 1, 0);
         delay(100);
     }
@@ -28,10 +29,14 @@ void loop() {
 
 void connect_to_wifi(const char *ssid, const char *password){
     WiFi.begin(ssid, password);
+    uint8_t retries = 0;
 
-    if(WiFi.status() != WL_CONNECTED){
-        delay(500);
+    for(uint8_t i = 0; i < 10U; i++){
+        if(WiFi.status() == WL_CONNECTED)
+            break;
+        
         Serial.print(".");
+        delay(500);
     }
 
     Serial.println("");
