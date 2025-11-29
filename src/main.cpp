@@ -6,8 +6,9 @@
 void connect_to_wifi(const char *ssid, const char *password);
 
 #define INPUT_PIN 4
+#define MQTT_TOPIC "esp32/topic"
 
-MQTTCyan *client1 = new MQTTCyan(mqtt_config);
+MQTTCyan *client1;
 const char *dummy_msg =  "Hi from silly esp32 :3";
 
 void setup() {
@@ -22,9 +23,12 @@ void setup() {
 
 void loop() {
     if(digitalRead(INPUT_PIN) == HIGH){
-        client1->publish("esp32/topic", dummy_msg, 1, 0);
+        client1->publish(MQTT_TOPIC, dummy_msg, 1, 0);
         delay(100);
     }
+    Serial.println("Paws at you, hi :3");
+    delay(5000);
+
 }
 
 void connect_to_wifi(const char *ssid, const char *password){
@@ -42,4 +46,5 @@ void connect_to_wifi(const char *ssid, const char *password){
     Serial.println("");
     Serial.printf("Successfully connected to %s\n", ssid);
     Serial.printf("IP address: %s", WiFi.localIP());
+    client1 = new MQTTCyan(mqtt_config);
 }
